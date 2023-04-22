@@ -1,20 +1,75 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+
+import {  StyleSheet, SafeAreaView, Text, View } from 'react-native';
+
+import Ionic from "react-native-vector-icons/Ionicons"
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from './src/components/screens/Home'
+import Search from './src/components/screens/Search'
+import Reels from './src/components/screens/Reels'
+import Activity from './src/components/screens/Activity'
+import Profile from './src/components/screens/Profile'
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
+  const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
+  const bottomTabScreen = () =>{
+    return(
+      <Tab.Navigator
+          screenOptions={({route}) => ({
+            tabBarShowLabels : false,
+            headerShown:false,
+            tabBarStyle :{
+              height:100
+            },
+            tabBarIcon:({focused,size,colour}) =>{
+              let iconName;
+              if(route.name === "Home"){
+                iconName = focused? "home-sharp" : "home-outline";
+                size = focused? size+8 : size+2;
+              }else if(route.name === "Search"){
+                iconName = focused? "search" : "ios-search-outline"
+              }else if(route.name === "Reels"){
+                iconName = focused? "caret-forward-circle" : "caret-forward-circle-outline"
+              }else if(route.name === "Activity"){
+                iconName = focused? "ios-heart" : "ios-heart-outline"
+              }else if(route.name === "Profile"){
+                iconName = focused? "ios-person-circle" : "ios-person-outline"
+              }
+              return <Ionic name ={iconName} size ={size} color={colour}/>
+            }
+          })}>
+            <Tab.Screen name = "Home" component={Home}/>
+            <Tab.Screen name = "Search" component={Search}/>
+            <Tab.Screen name = "Reels" component={Reels}/>
+            <Tab.Screen name = "Activity" component={Activity}/>
+            <Tab.Screen name = "Profile" component={Profile}/>
+
+        </Tab.Navigator>
+    )
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+    <NavigationContainer>
+      <Stack.Navigator
+      screenOptions={{
+        headerShown:false
+      }}
+      >
+        <Stack.Screen name = "Bottom" component={bottomTabScreen}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+    </SafeAreaView>
+  );
+}const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  
 });
+
+ 
